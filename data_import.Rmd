@@ -1,21 +1,32 @@
 ---
 title: "Simple document"
-output: html_document
+output: github_document
 ---
+```{r setup, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+This document will show how to import data.
 
-I'm an R Markdown document! 
+## import the FAS Litters CSV
+```{r}
+litters_df = read_csv("data/FAS_litters.csv")
 
-# Section 1
-
-Here's a **code chunk** that samples from 
-a _normal distribution_:
+```
+## look at the. dataset
 
 ```{r}
-samp = rnorm(100)
-length(samp)
+head(litters_df)
+tail(litters_df)
 ```
 
-# Section 2
 
-I can take the mean of the sample, too!
-The mean is `r mean(samp)`.
+
+```{r eval=FALSE}
+view(litters_df)
+```
+
+```{r}
+
+```
+
+
