@@ -1,88 +1,86 @@
 ---
-title: "Simple document"
+title: "Data Manipulation"
 output: github_document
 ---
 ```{r setup, echo=FALSE, message=FALSE}
 library(tidyverse)
 ```
-This document will show how to import data.
-
-## import the FAS Litters CSV
-```{r}
-litters_df = read_csv("data/FAS_litters.csv")
-install.packages("janitor")
-install.packages("read.excel")
-library(readxl)
-library(haven)
-litters_df = janitor::clean_names(litters_df) #get rid of all the special characters
-```
-## look at the dataset
-
-```{r}
-head(litters_df)
-tail(litters_df)
-names(litters_df)
-```
-
-```{r eval=FALSE}
-view(litters_df)
-```
-
-## import pups
-```{r, eval=FALSE}
-pup_df = read_csv("data/FAS_pups.csv")
-pup_df = janitor::clean_names(pup_df)
-pup_df
-```
-## look at read_csv options
-col names and skipping rows
-```{r}
-litters_df=
-  read_csv(
-    file="data/FAS_litters.csv",
-    skip=0
-  )
-```
+This document will show how to "manipulate" data.
+import two datasets that we're going to manipulate.
 
 ```{r}
 litters_df=
-  read_csv(
-    file="data/FAS_litters.csv",
-    na = c("NA", "", ".")
-  )
+  read.csv("data/FAS_litters.csv", na=c("NA", "", "."))
 
-litters_df = janitor ::clean_names(litters_df)
-pull(litters_df, gd0_weight)
+litters_df = janitor::clean_names(litters_df)
+
+pups_df=
+  read_csv("data/FAS_pups.csv", na=c("NA", "", "."))
+pups_df = janitor::clean_names(pups_df)
 ```
+## `select`
 
-What is we code `group` as a factor variable?
+use select to select variables
 
 ```{r}
-litters_df=
-  read_csv(
-    file="data/FAS_litters.csv",
-           na=c("NA", "", "."),
-           col_types = cols(
-             Group = col_factor()
-           )
-          )
+select(litters_df, group, litter_number, gd0_weight)
 ```
 
-## import an excel file
-import MLB 2011 summary data
 ```{r}
-mlb_df = read_excel("data/mlb11.xlsx", sheet="mlb11")
+select(litters_df, group:gd18_weight)
 ```
-
-## import SAS data
 ```{r}
-pulse_df = read_sas("data/public_pulse_data.sas7bdat")
+select(litters_df, -pups_survive)
+select(litters_df, starts_with("gd"))
+select(litters_df, contains("pups"))
 ```
 
-## Never use read.csv()
-```{r, echo=False, message=FALSE}
-litters_df=read_csv("data/FAS_litters.csv")
+```{r}
+select(litters_df, GROUP = group)
+
+rename(litters_df, GROUP =group)
+
+select(litters_df, litter_number, gd0_weight)
+
+relocate(litters_df, litter_number, gd0_weight)
+```
+
+```{r}
+select(pups_df, litter_number, sex, pd_ears)
+```
+
+## `filter`
+
+```{r}
+library(dplyr)
+filter(litters_df, gd_of_birth ==19)
+filter( litters_df, pups_born_alive > 5)
+
+
+filter(litters_df, group == c("Low7", "Low8"))
+filter(litters_df, group %in% c("Low7", "Low8"))
+
+filter(litters_df, group %in% c("Low7", "Low8", pups_born_alive > 5))
+
+filter(pup_df,sex==1)
+filter(pup_df, pd_walk < 11, sex ==2)
+```
+
+```{r filter out rows with missing variables}
+drop_na(litters_df)
+filter(pup_df,sex=1)
 ```
 
 
 
+
+
+
+
+## `mutate`
+
+
+## `arrange`
+
+
+## `piping`
