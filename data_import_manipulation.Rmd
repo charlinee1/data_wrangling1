@@ -1,0 +1,88 @@
+---
+title: "Simple document"
+output: github_document
+---
+```{r setup, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+This document will show how to import data.
+
+## import the FAS Litters CSV
+```{r}
+litters_df = read_csv("data/FAS_litters.csv")
+install.packages("janitor")
+install.packages("read.excel")
+library(readxl)
+library(haven)
+litters_df = janitor::clean_names(litters_df) #get rid of all the special characters
+```
+## look at the dataset
+
+```{r}
+head(litters_df)
+tail(litters_df)
+names(litters_df)
+```
+
+```{r eval=FALSE}
+view(litters_df)
+```
+
+## import pups
+```{r, eval=FALSE}
+pup_df = read_csv("data/FAS_pups.csv")
+pup_df = janitor::clean_names(pup_df)
+pup_df
+```
+## look at read_csv options
+col names and skipping rows
+```{r}
+litters_df=
+  read_csv(
+    file="data/FAS_litters.csv",
+    skip=0
+  )
+```
+
+```{r}
+litters_df=
+  read_csv(
+    file="data/FAS_litters.csv",
+    na = c("NA", "", ".")
+  )
+
+litters_df = janitor ::clean_names(litters_df)
+pull(litters_df, gd0_weight)
+```
+
+What is we code `group` as a factor variable?
+
+```{r}
+litters_df=
+  read_csv(
+    file="data/FAS_litters.csv",
+           na=c("NA", "", "."),
+           col_types = cols(
+             Group = col_factor()
+           )
+          )
+```
+
+## import an excel file
+import MLB 2011 summary data
+```{r}
+mlb_df = read_excel("data/mlb11.xlsx", sheet="mlb11")
+```
+
+## import SAS data
+```{r}
+pulse_df = read_sas("data/public_pulse_data.sas7bdat")
+```
+
+## Never use read.csv()
+```{r, echo=False, message=FALSE}
+litters_df=read_csv("data/FAS_litters.csv")
+```
+
+
+
